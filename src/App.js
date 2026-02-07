@@ -1,67 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { auth, provider } from "./firebase";
-import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
-
+import FocusTimer from "./FocusTimer";
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (u) => setUser(u));
-  }, []);
-
-  const login = () => signInWithPopup(auth, provider);
-  const logout = () => signOut(auth);
+  const [active, setActive] = useState(null);
 
   return (
-    <div style={{ fontFamily: "Arial", padding: 20 }}>
-      {/* HEADER */}
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        borderBottom: "2px solid #ddd",
-        paddingBottom: 10
-      }}>
-        <h2>📊 Analyser</h2>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black text-white p-8">
+      <h1 className="text-4xl font-bold mb-8 text-center">
+        📊 Study Analyser Dashboard
+      </h1>
 
-        {user ? (
-          <div>
-            👋 {user.displayName}
-            <button onClick={logout} style={{ marginLeft: 10 }}>Logout</button>
-          </div>
-        ) : (
-          <button onClick={login}>Login with Google</button>
-        )}
-      </div>
-
-      {/* DASHBOARD */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-        gap: 20,
-        marginTop: 30
-      }}>
-        <Card title="📈 Marks Analyser" />
-        <Card title="✅ To-Do List" />
-        <Card title="🎯 Focus Area" />
-        <Card title="📅 Calendar" />
-        <Card title="🎵 Study Music" />
-        <Card title="👥 Friends Connect" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <DashboardCard title="📈 Marks Analysis" desc="Track your test performance" />
+        <DashboardCard title="🎯 Focus Area" desc="Subjects to improve" />
+        <DashboardCard title="🧠 SWOT Analysis" desc="Strengths & Weaknesses" />
+        <DashboardCard title="📅 Study Planner" desc="Calendar & To-Do" />
+        <DashboardCard title="📚 Storage" desc="Notes & Books" />
+        <DashboardCard title="🎵 Music Zone" desc="Focus music while studying" />
+        <div className="mt-8 max-w-sm mx-auto">
+  <FocusTimer />
+</div>
       </div>
     </div>
   );
 }
 
-function Card({ title }) {
+function DashboardCard({ title, desc, onClick }) {
+
   return (
-    <div style={{
-      border: "1px solid #ccc",
-      borderRadius: 10,
-      padding: 20,
-      background: "#fafafa"
-    }}>
-      <h3>{title}</h3>
-      <p>Coming soon…</p>
+    <div
+  onClick={onClick}
+  className="cursor-pointer bg-white/10 backdrop-blur-lg rounded-2xl p-6 hover:scale-105 transition"
+>
+
+      <h2 className="text-xl font-semibold mb-2">{title}</h2>
+      <p className="text-gray-300">{desc}</p>
     </div>
+    
   );
 }
 
